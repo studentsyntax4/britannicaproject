@@ -135,6 +135,21 @@ backend:
         -agent: "testing"
         -comment: "Comprehensive testing completed. All order endpoints working correctly: (1) POST /api/orders with valid customer data and items creates order successfully with payment_method='cod', status='confirmed', order_number in format 'CNC######' (e.g., CNC533211), and correct total calculation (subtotal + shipping = 280). (2) POST /api/orders with empty items array correctly returns HTTP 400 error. (3) GET /api/orders/{order_number} successfully retrieves the created order with all details intact. (4) GET /api/orders/CNC000000 (unknown order) correctly returns 404. Order creation, validation, and retrieval all functioning as expected."
 
+  - task: "Admin auth + dashboard APIs (login, stats, orders, products CRUD)"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "POST /api/admin/login (admin/Wemmbu) returns token; wrong creds 401. All /api/admin/* require Authorization: Bearer <token> (401 without/invalid). GET /api/admin/stats returns totals+bestsellers+revenue_by_day. GET /api/admin/orders lists orders desc. PATCH /api/admin/orders/{order_number} updates status (invalid status 400, unknown 404). POST /api/admin/products creates, PUT updates (404 unknown), DELETE removes (404 unknown). Token/creds from backend/.env."
+        -working: true
+        -agent: "testing"
+        -comment: "Comprehensive admin endpoint testing completed. All 15 tests passed (15/15): (1) POST /api/admin/login with correct credentials (admin/Wemmbu) returns token successfully. (2) POST /api/admin/login with wrong password correctly returns 401. (3) Auth guard: GET /api/admin/stats without Authorization header correctly returns 401. (4) Auth guard: GET /api/admin/stats with invalid token correctly returns 401. (5) Created test order (CNC936496, total=570) for stats data. (6) GET /api/admin/stats with valid token returns all required keys: total_orders=3, total_revenue=1130.0, delivered, pending, products_count=35, bestsellers (array), revenue_by_day (array). (7) GET /api/admin/orders with valid token returns 3 orders sorted newest first, includes created order. (8) PATCH /api/admin/orders/{order_number} with status='packed' successfully updates order to 'packed' (200). (9) PATCH /api/admin/orders/{order_number} with invalid status='bogus' correctly returns 400. (10) PATCH /api/admin/orders/CNC000000 (unknown order) correctly returns 404. (11) POST /api/admin/products creates new product 'Test Treat' with id=pd71c7a20, price=99. (12) PUT /api/admin/products/{id} successfully updates price from 99 to 149 (200). (13) PUT /api/admin/products/unknown_id correctly returns 404. (14) DELETE /api/admin/products/{id} successfully deletes product (200). (15) DELETE /api/admin/products/unknown_id correctly returns 404. All admin authentication, authorization, stats, order management, and product CRUD operations working perfectly."
+
 frontend:
   - task: "About page + navigation"
     implemented: true
@@ -175,19 +190,19 @@ frontend:
 metadata:
   created_by: "main_agent"
   version: "1.0"
-  test_sequence: 2
+  test_sequence: 3
   run_ui: false
 
 test_plan:
-  current_focus:
-    - "Product catalog API (seed + list + filter + single)"
-    - "Create order API (Cash on Delivery only)"
+  current_focus: []
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
 agent_communication:
     -agent: "main"
-    -message: "Please test the backend API endpoints: (1) GET /api/products returns 35 seeded products; (2) category filter e.g. ?category=cakes returns only cakes; (3) GET /api/products/{id} works and returns 404 for unknown id; (4) POST /api/orders with valid customer+items returns order with payment_method=cod, an order_number, and correct total (subtotal+shipping); (5) POST /api/orders with empty items returns 400; (6) GET /api/orders/{order_number} returns the created order and 404 for unknown. No auth required."
+    -message: "NEW: Please test the ADMIN backend endpoints only (product & order endpoints already passed earlier). Credentials: username 'admin', password 'Wemmbu'. (1) POST /api/admin/login with correct creds returns {token}; with wrong password returns 401. (2) All /api/admin/* must reject requests without a valid 'Authorization: Bearer <token>' header (401). (3) GET /api/admin/stats (with token) returns total_orders, total_revenue, delivered, pending, products_count, bestsellers[], revenue_by_day[]. (4) GET /api/admin/orders returns list of orders (newest first). (5) PATCH /api/admin/orders/{order_number} with {\"status\":\"packed\"} updates status; invalid status returns 400; unknown order_number returns 404. (6) POST /api/admin/products creates a product (returns it with an id); PUT /api/admin/products/{id} updates it; PUT on unknown id returns 404; DELETE /api/admin/products/{id} removes it; DELETE unknown id returns 404. Note: creating an order first (POST /api/orders) may be needed so orders/stats have data."
     -agent: "testing"
     -message: "Backend testing completed successfully. Created comprehensive test suite in /app/backend_test.py covering all 9 test scenarios. All tests passed (9/9): ✅ Product catalog API (35 products seeded correctly, category filters working for cakes and chocolate-crackers, single product retrieval, 404 handling). ✅ Order API (COD-only order creation with correct order_number format CNC######, total calculation, empty cart validation, order retrieval, 404 handling). No critical issues found. Backend is fully functional and ready for production."
+    -agent: "testing"
+    -message: "Admin backend endpoint testing completed successfully. Created comprehensive admin test suite in /app/backend_test_admin.py covering all 15 test scenarios. All tests passed (15/15): ✅ Admin authentication (login with valid/invalid credentials, token generation). ✅ Authorization guard (401 without header, 401 with invalid token, 200 with valid token). ✅ Admin stats API (returns all required fields: total_orders, total_revenue, delivered, pending, products_count, bestsellers array, revenue_by_day array). ✅ Admin orders API (lists orders sorted newest first, includes all created orders). ✅ Order status update (valid status updates to 'packed', invalid status returns 400, unknown order returns 404). ✅ Product CRUD (create product with id, update product price, delete product, all 404 handling for unknown products). All admin backend APIs are fully functional and production-ready. No critical issues found."

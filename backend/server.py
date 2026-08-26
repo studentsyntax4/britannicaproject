@@ -1,4 +1,5 @@
 from fastapi import FastAPI, APIRouter
+from fastapi import HTTPException, Header, Depends
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -171,6 +172,152 @@ async def get_order(order_number: str):
     if isinstance(order.get("created_at"), str):
         order["created_at"] = datetime.fromisoformat(order["created_at"])
     return order
+
+
+# ---------------- Admin: Auth ----------------
+ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin")
+ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN", "cnc_admin_token")
+ORDER_STATUSES = ["confirmed", "packed", "out_for_delivery", "delivered", "cancelled"]
+
+
+class AdminLogin(BaseModel):
+    username: str
+    password: str
+
+
+class StatusUpdate(BaseModel):
+    status: str
+
+
+class ProductUpsert(BaseModel):
+    name: str
+    category: str
+    price: float
+    img: str
+    tag: Optional[str] = None
+    desc: str = ""
+    rating: float = 4.7
+    reviews: int = 50
+
+
+async def verify_admin(authorization: Optional[str] = Header(None)):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    token = authorization.split(" ", 1)[1]
+    if token != ADMIN_TOKEN:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    return True
+
+
+@api_router.post("/admin/login")
+async def admin_login(payload: AdminLogin):
+    if payload.username == ADMIN_USERNAME and payload.password == ADMIN_PASSWORD:
+        return {"token": ADMIN_TOKEN, "username": ADMIN_USERNAME}
+    raise HTTPException(status_code=401, detail="Invalid credentials")
+
+
+# ---------------- Admin: Stats ----------------
+@api_router.get("/admin/stats")
+async def admin_stats(_: bool = Depends(verify_admin)):
+    orders = await db.orders.find({}, {"_id": 0}).to_list(5000)
+    total_orders = len(orders)
+    total_revenue = sum(o.get("total", 0) for o in orders)
+    delivered = sum(1 for o in orders if o.get("status") == "delivered")
+    pending = sum(1 for o in orders if o.get("status") in ("confirmed", "packed", "out_for_delivery"))
+    products_count = await db.products.count_documents({})
+
+    # bestsellers by qty sold
+    tally = {}
+    for o in orders:
+        for it in o.get("items", []):
+            tally[it["name"]] = tally.get(it["name"], 0) + it.get("qty", 0)
+    bestsellers = sorted(
+        [{"name": k, "qty": v} for k, v in tally.items()], key=lambda x: x["qty"], reverse=True
+    )[:5]
+
+    # revenue over last 7 days (by date)
+    from collections import defaultdict
+    day_rev = defaultdict(float)
+    for o in orders:
+        ca = o.get("created_at")
+        if isinstance(ca, str):
+            day = ca[:10]
+        elif isinstance(ca, datetime):
+            day = ca.date().isoformat()
+        else:
+            continue
+        day_rev[day] += o.get("total", 0)
+    revenue_by_day = [{"date": k, "revenue": v} for k, v in sorted(day_rev.items())][-7:]
+
+    return {
+        "total_orders": total_orders,
+        "total_revenue": total_revenue,
+        "delivered": delivered,
+        "pending": pending,
+        "products_count": products_count,
+        "bestsellers": bestsellers,
+        "revenue_by_day": revenue_by_day,
+    }
+
+
+# ---------------- Admin: Orders ----------------
+@api_router.get("/admin/orders", response_model=List[Order])
+async def admin_orders(_: bool = Depends(verify_admin)):
+    orders = await db.orders.find({}, {"_id": 0}).to_list(5000)
+    for o in orders:
+        if isinstance(o.get("created_at"), str):
+            o["created_at"] = datetime.fromisoformat(o["created_at"])
+    orders.sort(key=lambda x: x["created_at"], reverse=True)
+    return orders
+
+
+@api_router.patch("/admin/orders/{order_number}", response_model=Order)
+async def admin_update_order(order_number: str, payload: StatusUpdate, _: bool = Depends(verify_admin)):
+    if payload.status not in ORDER_STATUSES:
+        raise HTTPException(status_code=400, detail="Invalid status")
+    result = await db.orders.find_one_and_update(
+        {"order_number": order_number},
+        {"$set": {"status": payload.status}},
+        return_document=True,
+    )
+    if not result:
+        raise HTTPException(status_code=404, detail="Order not found")
+    order = await db.orders.find_one({"order_number": order_number}, {"_id": 0})
+    if isinstance(order.get("created_at"), str):
+        order["created_at"] = datetime.fromisoformat(order["created_at"])
+    return order
+
+
+# ---------------- Admin: Products ----------------
+@api_router.post("/admin/products", response_model=Product)
+async def admin_create_product(payload: ProductUpsert, _: bool = Depends(verify_admin)):
+    new_id = f"p{uuid.uuid4().hex[:8]}"
+    last = await db.products.find({}, {"order": 1, "_id": 0}).sort("order", -1).to_list(1)
+    next_order = (last[0]["order"] + 1) if last and "order" in last[0] else 1000
+    doc = payload.model_dump()
+    doc["id"] = new_id
+    doc["order"] = next_order
+    await db.products.insert_one(doc)
+    return {**doc}
+
+
+@api_router.put("/admin/products/{product_id}", response_model=Product)
+async def admin_update_product(product_id: str, payload: ProductUpsert, _: bool = Depends(verify_admin)):
+    existing = await db.products.find_one({"id": product_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Product not found")
+    await db.products.update_one({"id": product_id}, {"$set": payload.model_dump()})
+    updated = await db.products.find_one({"id": product_id}, {"_id": 0})
+    return updated
+
+
+@api_router.delete("/admin/products/{product_id}")
+async def admin_delete_product(product_id: str, _: bool = Depends(verify_admin)):
+    result = await db.products.delete_one({"id": product_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return {"deleted": product_id}
 
 
 # Include the router in the main app
