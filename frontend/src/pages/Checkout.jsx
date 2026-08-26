@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { CheckCircle2, Lock, Heart } from 'lucide-react';
+import { CheckCircle2, BadgeIndianRupee, Heart, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useCart } from '../context/CartContext';
+import { createOrder } from '../lib/api';
 
 const Field = ({ label, ...props }) => (
   <label className="block">
@@ -15,6 +16,8 @@ const Checkout = () => {
   const { items, subtotal, clearCart } = useCart();
   const navigate = useNavigate();
   const [placed, setPlaced] = useState(false);
+  const [orderRef, setOrderRef] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', phone: '', address: '', city: '', pin: '' });
 
   const shipping = subtotal >= 499 || subtotal === 0 ? 0 : 40;
@@ -22,15 +25,29 @@ const Checkout = () => {
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  const placeOrder = (e) => {
+  const placeOrder = async (e) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.address || !form.phone) {
       toast.error('Please fill in your details');
       return;
     }
-    setPlaced(true);
-    clearCart();
-    window.scrollTo({ top: 0 });
+    setSubmitting(true);
+    try {
+      const order = await createOrder({
+        customer: form,
+        items: items.map((i) => ({ id: i.id, name: i.name, price: i.price, qty: i.qty })),
+        subtotal,
+        shipping,
+      });
+      setOrderRef(order.order_number);
+      setPlaced(true);
+      clearCart();
+      window.scrollTo({ top: 0 });
+    } catch (err) {
+      toast.error('Could not place order. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (placed) {
@@ -40,10 +57,10 @@ const Checkout = () => {
           <CheckCircle2 size={44} />
         </div>
         <h1 className="font-display text-4xl font-black text-[#2F5741]">Order placed! ♥</h1>
-        <p className="mt-3 text-[#5A5148]">Thank you for choosing crunchy happiness, {form.name.split(' ')[0] || 'friend'}! A confirmation is on its way to your inbox.</p>
+        <p className="mt-3 text-[#5A5148]">Thank you for choosing crunchy happiness, {form.name.split(' ')[0] || 'friend'}! Pay with <span className="font-semibold text-[#2F5741]">Cash on Delivery</span> when your treats arrive.</p>
         <div className="mt-6 inline-block bg-[#EFE7D6] rounded-2xl px-6 py-4 text-left">
           <p className="text-sm text-[#6B6258]">Order reference</p>
-          <p className="font-display font-bold text-xl text-[#2F5741]">#CNC{Math.floor(100000 + Math.random() * 900000)}</p>
+          <p className="font-display font-bold text-xl text-[#2F5741]">#{orderRef}</p>
         </div>
         <div className="mt-8">
           <Link to="/shop" className="inline-flex items-center gap-2 px-7 py-4 rounded-full bg-[#2F5741] text-white font-semibold hover:bg-[#264a37] transition-colors">Continue shopping</Link>
@@ -87,14 +104,22 @@ const Checkout = () => {
           </div>
 
           <div className="bg-white rounded-2xl border border-[#EBE0CE] p-6">
-            <h2 className="font-display text-xl font-bold text-[#2F5741] mb-4">Payment</h2>
-            <div className="flex items-center gap-2 text-sm text-[#6B6258] bg-[#EFE7D6] rounded-xl px-4 py-3">
-              <Lock size={16} /> This is a demo checkout — no real payment is taken.
+            <h2 className="font-display text-xl font-bold text-[#2F5741] mb-4">Payment method</h2>
+            <div className="flex items-center gap-4 border-2 border-[#7FA06A] bg-[#7FA06A]/10 rounded-2xl px-4 py-4">
+              <div className="w-11 h-11 rounded-full bg-[#7FA06A] text-white flex items-center justify-center shrink-0">
+                <BadgeIndianRupee size={22} />
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-[#2F5741]">Cash on Delivery</p>
+                <p className="text-sm text-[#6B6258]">Pay in cash when your treats arrive at your door.</p>
+              </div>
+              <span className="w-5 h-5 rounded-full border-[6px] border-[#2F5741]" />
             </div>
+            <p className="mt-3 text-xs text-[#6B6258]">Cash on Delivery is currently the only accepted payment method.</p>
           </div>
 
-          <button type="submit" className="w-full py-4 rounded-full bg-[#2F5741] text-white font-semibold hover:bg-[#264a37] transition-colors flex items-center justify-center gap-2">
-            <Heart size={18} /> Place order · ₹{total}
+          <button type="submit" disabled={submitting} className="w-full py-4 rounded-full bg-[#2F5741] text-white font-semibold hover:bg-[#264a37] transition-colors flex items-center justify-center gap-2 disabled:opacity-60">
+            {submitting ? <><Loader2 size={18} className="animate-spin" /> Placing order…</> : <><Heart size={18} /> Place order (COD) · ₹{total}</>}
           </button>
         </form>
 

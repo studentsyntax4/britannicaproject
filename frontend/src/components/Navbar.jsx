@@ -45,9 +45,10 @@ const Navbar = () => {
 
           <div className="hidden lg:flex items-center gap-7 text-sm font-medium text-[#2F5741]">
             <Link to="/shop" className="hover:text-[#D97E90] transition-colors">Shop All</Link>
-            {CATEGORIES.slice(0, 4).map((c) => (
+            {CATEGORIES.slice(0, 3).map((c) => (
               <Link key={c.id} to={`/shop/${c.id}`} className="hover:text-[#D97E90] transition-colors">{c.name}</Link>
             ))}
+            <Link to="/about" className="hover:text-[#D97E90] transition-colors">About</Link>
           </div>
 
           <div className="flex items-center gap-2">
@@ -75,6 +76,7 @@ const Navbar = () => {
             {CATEGORIES.map((c) => (
               <button key={c.id} onClick={() => go(`/shop/${c.id}`)} className="text-left py-2.5 px-3 rounded-lg hover:bg-[#F2C9D1] text-[#2F5741]">{c.name}</button>
             ))}
+            <button onClick={() => go('/about')} className="text-left py-2.5 px-3 rounded-lg hover:bg-[#F2C9D1] font-medium text-[#2F5741]">About</button>
           </div>
         )}
       </header>

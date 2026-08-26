@@ -1,8 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { SlidersHorizontal } from 'lucide-react';
-import { PRODUCTS, CATEGORIES, byCategory } from '../mock';
+import { CATEGORIES } from '../mock';
+import { useProducts } from '../context/ProductsContext';
 import ProductCard from '../components/ProductCard';
+import ProductSkeleton from '../components/ProductSkeleton';
 
 const SORTS = [
   { id: 'featured', label: 'Featured' },
@@ -14,11 +16,12 @@ const SORTS = [
 const Shop = () => {
   const { category } = useParams();
   const [sort, setSort] = useState('featured');
+  const { products, loading, byCategory } = useProducts();
 
   const activeCat = CATEGORIES.find((c) => c.id === category);
-  const base = category ? byCategory(category) : PRODUCTS;
+  const base = category ? byCategory(category) : products;
 
-  const products = useMemo(() => {
+  const sorted = useMemo(() => {
     const arr = [...base];
     if (sort === 'low') arr.sort((a, b) => a.price - b.price);
     if (sort === 'high') arr.sort((a, b) => b.price - a.price);
@@ -55,7 +58,7 @@ const Shop = () => {
 
       {/* Toolbar */}
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-8 flex items-center justify-between gap-4 flex-wrap">
-        <p className="text-sm text-[#6B6258]"><span className="font-semibold text-[#2F5741]">{products.length}</span> treats</p>
+        <p className="text-sm text-[#6B6258]"><span className="font-semibold text-[#2F5741]">{loading ? '…' : products.length && base.length}</span> treats</p>
         <div className="flex items-center gap-2 text-sm">
           <SlidersHorizontal size={16} className="text-[#6B6258]" />
           <select value={sort} onChange={(e) => setSort(e.target.value)} className="bg-white border border-[#E4D8C4] rounded-full px-4 py-2 text-[#2F5741] font-medium outline-none focus:border-[#D97E90] cursor-pointer">
@@ -65,8 +68,16 @@ const Shop = () => {
       </div>
 
       {/* Grid */}
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {products.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-8">
+        {loading ? (
+          <ProductSkeleton count={8} />
+        ) : sorted.length === 0 ? (
+          <p className="text-center text-[#6B6258] py-16">No treats found here yet.</p>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {sorted.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Minus, Plus, Star, ArrowLeft, Heart, Truck, Leaf, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
-import { getProduct, byCategory, CATEGORIES, ADDONS } from '../mock';
+import { CATEGORIES, ADDONS } from '../mock';
+import { useProducts } from '../context/ProductsContext';
 import ProductCard from '../components/ProductCard';
 import { useCart } from '../context/CartContext';
 
@@ -10,9 +11,16 @@ const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addItem } = useCart();
+  const { getProduct, byCategory, loading } = useProducts();
   const product = getProduct(id);
   const [qty, setQty] = useState(1);
   const [addons, setAddons] = useState([]);
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-24 text-center text-[#6B6258]">Loading treat…</div>
+    );
+  }
 
   if (!product) {
     return (

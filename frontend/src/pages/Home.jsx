@@ -1,14 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Heart, Leaf, Sparkles, Truck, Gift, Star } from 'lucide-react';
-import { PRODUCTS, bestsellers, byCategory } from '../mock';
+import { useProducts } from '../context/ProductsContext';
 import ProductCard from '../components/ProductCard';
+import ProductSkeleton from '../components/ProductSkeleton';
 import CategoryStrip from '../components/CategoryStrip';
 import Logo from '../components/Logo';
 
 const Home = () => {
-  const heroImg = PRODUCTS.find((p) => p.name === 'Classic Chocolate').img;
-  const packImg = PRODUCTS.find((p) => p.name === 'Premium Gift Box (72 pcs)').img;
+  const { products, loading, bestsellers, byCategory } = useProducts();
+  const heroImg = products.find((p) => p.name === 'Classic Chocolate')?.img || products[0]?.img;
+  const packImg = products.find((p) => p.name === 'Premium Gift Box (72 pcs)')?.img;
   const featured = bestsellers();
   const crackers = byCategory('chocolate-crackers').slice(0, 4);
 
@@ -89,7 +91,7 @@ const Home = () => {
           <Link to="/shop" className="hidden sm:inline text-sm font-semibold text-[#2F5741] hover:text-[#D97E90] transition-colors">Shop all →</Link>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {featured.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
+          {loading ? <ProductSkeleton count={8} /> : featured.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
         </div>
       </section>
 
@@ -106,7 +108,7 @@ const Home = () => {
           </div>
           <div className="relative min-h-[280px] checker-pink-green">
             <div className="absolute inset-0 flex items-center justify-center p-8">
-              <img src={crackers[0].img} alt="Signature crackers" className="w-full h-full object-cover rounded-3xl shadow-2xl float-slow" />
+              {crackers[0] && <img src={crackers[0].img} alt="Signature crackers" className="w-full h-full object-cover rounded-3xl shadow-2xl float-slow" />}
             </div>
           </div>
         </div>
