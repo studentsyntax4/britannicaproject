@@ -1,0 +1,72 @@
+.App {
+  min-height: 100vh;
+}
+
+/* Brand fonts */
+.font-display { font-family: 'Fraunces', serif; }
+.font-poster { font-family: 'Anton', sans-serif; letter-spacing: 0.02em; }
+.font-body { font-family: 'Poppins', sans-serif; }
+
+/* Checkerboard background patterns */
+.checker-pink-green {
+  background-image:
+    linear-gradient(45deg, #2F5741 25%, transparent 25%),
+    linear-gradient(-45deg, #2F5741 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #2F5741 75%),
+    linear-gradient(-45deg, transparent 75%, #2F5741 75%);
+  background-size: 44px 44px;
+  background-position: 0 0, 0 22px, 22px -22px, -22px 0px;
+  background-color: #F2C9D1;
+}
+
+.checker-strip {
+  background-image:
+    linear-gradient(45deg, #7FA06A 25%, transparent 25%),
+    linear-gradient(-45deg, #7FA06A 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #7FA06A 75%),
+    linear-gradient(-45deg, transparent 75%, #7FA06A 75%);
+  background-size: 24px 24px;
+  background-position: 0 0, 0 12px, 12px -12px, -12px 0px;
+  background-color: #F2C9D1;
+}
+
+/* Marquee */
+.marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marquee 26s linear infinite;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Entrance animations */
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.float-slow { animation: floaty 6s ease-in-out infinite; }
+@keyframes floaty {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-14px) rotate(4deg); }
+}
+
+.spin-slow { animation: spinSlow 40s linear infinite; }
+@keyframes spinSlow { to { transform: rotate(360deg); } }
+
+/* Product card hover */
+.product-card { transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s ease; }
+.product-card:hover { transform: translateY(-8px); box-shadow: 0 24px 44px -18px rgba(47,87,65,0.35); }
+.product-card:hover .product-img { transform: scale(1.08) rotate(-2deg); }
+.product-img { transition: transform 0.6s cubic-bezier(0.22,1,0.36,1); }
+
+/* Scalloped edge helper */
+.scallop {
+  -webkit-mask: radial-gradient(circle at 10px 0, transparent 0, transparent 9px, #000 10px) 0 0/20px 100%;
+}

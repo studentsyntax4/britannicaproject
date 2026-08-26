@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Anton&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    margin: 0;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #F7F1E8;
+    color: #2A2320;
+}
+
+@layer base {
+  :root {
+        --background: 40 43% 94%;
+        --foreground: 24 15% 15%;
+        --card: 0 0% 100%;
+        --card-foreground: 24 15% 15%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 24 15% 15%;
+        --primary: 149 30% 26%;
+        --primary-foreground: 40 43% 96%;
+        --secondary: 345 55% 87%;
+        --secondary-foreground: 149 30% 26%;
+        --muted: 40 30% 90%;
+        --muted-foreground: 24 10% 40%;
+        --accent: 345 55% 87%;
+        --accent-foreground: 149 30% 26%;
+        --destructive: 0 72% 51%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 40 20% 85%;
+        --input: 40 20% 85%;
+        --ring: 149 30% 26%;
+        --radius: 0.75rem;
+    }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+::selection {
+  background: #E79AAA;
+  color: #2F5741;
+}
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #F7F1E8; }
+::-webkit-scrollbar-thumb { background: #C7D3B8; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: #7FA06A; }
