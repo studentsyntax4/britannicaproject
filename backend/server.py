@@ -9,9 +9,9 @@ from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional
 import uuid
-import random
+import secrets
+from collections import defaultdict
 from datetime import datetime, timezone
-from fastapi import HTTPException
 from seed_data import get_seed_products
 
 
@@ -145,7 +145,7 @@ async def create_order(payload: OrderCreate):
         raise HTTPException(status_code=400, detail="Cart is empty")
 
     total = payload.subtotal + payload.shipping
-    order_number = f"CNC{random.randint(100000, 999999)}"
+    order_number = f"CNC{secrets.randbelow(900000) + 100000}"
 
     order = Order(
         order_number=order_number,
@@ -218,46 +218,54 @@ async def admin_login(payload: AdminLogin):
 
 
 # ---------------- Admin: Stats ----------------
+def _compute_bestsellers(orders):
+    tally = defaultdict(int)
+    for o in orders:
+        for it in o.get("items", []):
+            tally[it["name"]] += it.get("qty", 0)
+    ranked = sorted(
+        ({"name": k, "qty": v} for k, v in tally.items()),
+        key=lambda x: x["qty"],
+        reverse=True,
+    )
+    return ranked[:5]
+
+
+def _order_day(order):
+    ca = order.get("created_at")
+    if isinstance(ca, str):
+        return ca[:10]
+    if isinstance(ca, datetime):
+        return ca.date().isoformat()
+    return None
+
+
+def _compute_revenue_by_day(orders):
+    day_rev = defaultdict(float)
+    for o in orders:
+        day = _order_day(o)
+        if day is None:
+            continue
+        day_rev[day] += o.get("total", 0)
+    return [{"date": k, "revenue": v} for k, v in sorted(day_rev.items())][-7:]
+
+
+PENDING_STATUSES = ("confirmed", "packed", "out_for_delivery")
+
+
 @api_router.get("/admin/stats")
 async def admin_stats(_: bool = Depends(verify_admin)):
     orders = await db.orders.find({}, {"_id": 0}).to_list(5000)
-    total_orders = len(orders)
-    total_revenue = sum(o.get("total", 0) for o in orders)
-    delivered = sum(1 for o in orders if o.get("status") == "delivered")
-    pending = sum(1 for o in orders if o.get("status") in ("confirmed", "packed", "out_for_delivery"))
     products_count = await db.products.count_documents({})
 
-    # bestsellers by qty sold
-    tally = {}
-    for o in orders:
-        for it in o.get("items", []):
-            tally[it["name"]] = tally.get(it["name"], 0) + it.get("qty", 0)
-    bestsellers = sorted(
-        [{"name": k, "qty": v} for k, v in tally.items()], key=lambda x: x["qty"], reverse=True
-    )[:5]
-
-    # revenue over last 7 days (by date)
-    from collections import defaultdict
-    day_rev = defaultdict(float)
-    for o in orders:
-        ca = o.get("created_at")
-        if isinstance(ca, str):
-            day = ca[:10]
-        elif isinstance(ca, datetime):
-            day = ca.date().isoformat()
-        else:
-            continue
-        day_rev[day] += o.get("total", 0)
-    revenue_by_day = [{"date": k, "revenue": v} for k, v in sorted(day_rev.items())][-7:]
-
     return {
-        "total_orders": total_orders,
-        "total_revenue": total_revenue,
-        "delivered": delivered,
-        "pending": pending,
+        "total_orders": len(orders),
+        "total_revenue": sum(o.get("total", 0) for o in orders),
+        "delivered": sum(1 for o in orders if o.get("status") == "delivered"),
+        "pending": sum(1 for o in orders if o.get("status") in PENDING_STATUSES),
         "products_count": products_count,
-        "bestsellers": bestsellers,
-        "revenue_by_day": revenue_by_day,
+        "bestsellers": _compute_bestsellers(orders),
+        "revenue_by_day": _compute_revenue_by_day(orders),
     }
 
 

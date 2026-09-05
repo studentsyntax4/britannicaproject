@@ -159,6 +159,36 @@ backend:
         -agent: "testing"
         -comment: "REBRAND VERIFICATION: Admin APIs tested with new 'Tarri and Treacle' data. (1) POST /api/admin/login with admin/Wemmbu successfully returns token. (2) GET /api/admin/stats with valid token returns products_count=14 (correctly updated from 35 to match new catalog). Stats also show total_orders=1, total_revenue=180.0, bestsellers array with 'Classic Tarri Poha', and revenue_by_day array. (3) GET /api/admin/stats without Authorization header correctly returns 401. All admin authentication and stats APIs working correctly with rebranded data."
 
+  - task: "CODE-QUALITY FIX 1: Order number generation using secrets module"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Refactored order number generation from random module to secrets module for cryptographically secure random numbers. Line 12: import secrets. Line 148: order_number = f'CNC{secrets.randbelow(900000) + 100000}' generates CNC + 6 digits (100000-999999)."
+        -working: true
+        -agent: "testing"
+        -comment: "CODE-QUALITY FIX VERIFICATION COMPLETE. All 5 tests passed (5/5): ✅ Test 1: POST /api/orders with valid customer and item (Classic Tarri Poha qty 2, subtotal 180, shipping 0) created order with order_number=CNC940926 (matches pattern ^CNC\\d{6}$), payment_method=cod, status=confirmed, total=180. ✅ Test 2: Created 5 orders with unique order numbers (CNC789006, CNC614469, CNC112215, CNC138649, CNC390423) - all match pattern CNC###### and are unique. ✅ Test 3: GET /api/orders/CNC940926 successfully retrieved order (200). ✅ Test 4: GET /api/orders/CNC000000 correctly returned 404 for unknown order. ✅ Test 5: POST /api/orders with empty items correctly returned 400. Order number generation using secrets module is working correctly - all order numbers match pattern CNC###### (exactly 6 digits) and are unique."
+
+  - task: "CODE-QUALITY FIX 2: admin_stats() refactored into helper functions"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Refactored admin_stats() function into helper functions for better code organization and maintainability. Lines 221-231: _compute_bestsellers(orders) computes top 5 products by quantity. Lines 234-240: _order_day(order) extracts date from order. Lines 243-250: _compute_revenue_by_day(orders) computes last 7 days revenue. Lines 256-269: admin_stats() now calls these helpers."
+        -working: true
+        -agent: "testing"
+        -comment: "CODE-QUALITY FIX VERIFICATION COMPLETE. All 11 tests passed (11/11): ✅ Test 6: POST /api/admin/login with admin/Wemmbu successfully returned token. ✅ Test 7: GET /api/admin/stats without Authorization header correctly returned 401. ✅ Test 8: GET /api/admin/stats with valid token returned 200 with all required keys: total_orders, total_revenue, delivered, pending, products_count=14 (correct), bestsellers (array of {name, qty}, max 5, sorted desc by qty), revenue_by_day (array of {date, revenue}, max 7, sorted asc by date). Bestsellers structure verified: first item {'name': 'Classic Tarri Poha', 'qty': 14}. Revenue by day structure verified: first item {'date': '2026-09-05', 'revenue': 1260.0}. ✅ Test 9: Aggregation sanity checks passed: (a) Classic Tarri Poha found in bestsellers with qty=14 (expected >= 12 from 6 test orders with qty 2 each). (b) Total revenue=1260.0 (expected >= 1080 from 6 test orders * 180 each). (c) Pending count=7 (expected >= 6 confirmed orders created in tests). All helper functions (_compute_bestsellers, _order_day, _compute_revenue_by_day) are working correctly and producing accurate aggregated statistics."
+
 frontend:
   - task: "About page + navigation"
     implemented: true
@@ -199,7 +229,7 @@ frontend:
 metadata:
   created_by: "main_agent"
   version: "1.0"
-  test_sequence: 3
+  test_sequence: 4
   run_ui: false
 
 test_plan:
@@ -217,3 +247,8 @@ agent_communication:
     -message: "Admin backend endpoint testing completed successfully. Created comprehensive admin test suite in /app/backend_test_admin.py covering all 15 test scenarios. All tests passed (15/15): ✅ Admin authentication (login with valid/invalid credentials, token generation). ✅ Authorization guard (401 without header, 401 with invalid token, 200 with valid token). ✅ Admin stats API (returns all required fields: total_orders, total_revenue, delivered, pending, products_count, bestsellers array, revenue_by_day array). ✅ Admin orders API (lists orders sorted newest first, includes all created orders). ✅ Order status update (valid status updates to 'packed', invalid status returns 400, unknown order returns 404). ✅ Product CRUD (create product with id, update product price, delete product, all 404 handling for unknown products). All admin backend APIs are fully functional and production-ready. No critical issues found."
     -agent: "testing"
     -message: "REBRAND VERIFICATION COMPLETE: Store successfully rebranded to 'Tarri and Treacle' with new product catalog. Created comprehensive test suite in /app/backend_test_rebrand.py. All 5 tests passed (5/5): ✅ GET /api/products returns exactly 14 products (down from 35) with correct categories: tarri-poha (4), snacks (6), barfi (4). Product names verified: 'Classic Tarri Poha', 'Nagpur Sev Puri', 'Classic Santra Burfi'. ✅ Category filters working: ?category=tarri-poha returns 4 items, ?category=barfi returns 4 items. ✅ GET /api/products/p1 returns 'Classic Tarri Poha' at price 90 (changed from previous 'Classic Chocolate'). 404 handling works. ✅ POST /api/orders with COD creates order successfully with new product data (order_number CNC786587, total 180). ✅ Admin login (admin/Wemmbu) works, GET /api/admin/stats returns products_count=14 (correctly updated), authorization guard returns 401 without token. Backend fully functional with rebranded data. No critical issues found."
+    -agent: "main"
+    -message: "CODE-QUALITY FIXES APPLIED: Two refactoring improvements made to backend/server.py: (1) Order number generation now uses secrets module instead of random for cryptographically secure random numbers (line 12: import secrets, line 148: secrets.randbelow(900000) + 100000). (2) admin_stats() function refactored into helper functions for better maintainability: _compute_bestsellers (lines 221-231), _order_day (lines 234-240), _compute_revenue_by_day (lines 243-250). Please verify both fixes work correctly and nothing broke."
+    -agent: "testing"
+    -message: "CODE-QUALITY FIXES VERIFICATION COMPLETE: Both fixes tested and working perfectly. Created comprehensive test suite in /app/backend_test_fixes.py. All 16 tests passed (16/16). ✅ FIX 1 (Order number with secrets module): (1) POST /api/orders creates order with order_number matching pattern ^CNC\\d{6}$ (e.g., CNC940926), payment_method=cod, status=confirmed, correct total. (2) Created 5 orders with unique order numbers (CNC789006, CNC614469, CNC112215, CNC138649, CNC390423) - all match pattern and are unique. (3) GET /api/orders/{order_number} returns order (200). (4) GET /api/orders/CNC000000 returns 404. (5) POST /api/orders with empty items returns 400. ✅ FIX 2 (admin_stats refactored): (6) POST /api/admin/login with admin/Wemmbu returns token. (7) GET /api/admin/stats without token returns 401. (8) GET /api/admin/stats with token returns 200 with all required keys: total_orders, total_revenue, delivered, pending, products_count=14, bestsellers (array of {name, qty}, max 5, sorted desc), revenue_by_day (array of {date, revenue}, max 7, sorted asc). (9) Aggregation sanity checks passed: Classic Tarri Poha in bestsellers with qty=14, total_revenue=1260.0, pending=7. All helper functions working correctly. No issues found - both code-quality fixes are production-ready."
+
