@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Anton&family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,700&family=Anton&family=Poppins:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -9,31 +9,31 @@ body {
     font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #F7F1E8;
-    color: #2A2320;
+    background-color: #F5EBD6;
+    color: #4A3626;
 }
 
 @layer base {
   :root {
-        --background: 40 43% 94%;
-        --foreground: 24 15% 15%;
+        --background: 40 55% 90%;
+        --foreground: 24 33% 22%;
         --card: 0 0% 100%;
-        --card-foreground: 24 15% 15%;
+        --card-foreground: 24 33% 22%;
         --popover: 0 0% 100%;
-        --popover-foreground: 24 15% 15%;
-        --primary: 149 30% 26%;
-        --primary-foreground: 40 43% 96%;
-        --secondary: 345 55% 87%;
-        --secondary-foreground: 149 30% 26%;
-        --muted: 40 30% 90%;
-        --muted-foreground: 24 10% 40%;
-        --accent: 345 55% 87%;
-        --accent-foreground: 149 30% 26%;
-        --destructive: 0 72% 51%;
+        --popover-foreground: 24 33% 22%;
+        --primary: 24 47% 17%;
+        --primary-foreground: 40 55% 94%;
+        --secondary: 32 60% 84%;
+        --secondary-foreground: 24 47% 17%;
+        --muted: 40 40% 86%;
+        --muted-foreground: 30 15% 40%;
+        --accent: 27 76% 45%;
+        --accent-foreground: 40 55% 96%;
+        --destructive: 0 72% 48%;
         --destructive-foreground: 0 0% 98%;
-        --border: 40 20% 85%;
-        --input: 40 20% 85%;
-        --ring: 149 30% 26%;
+        --border: 36 45% 79%;
+        --input: 36 45% 79%;
+        --ring: 27 76% 45%;
         --radius: 0.75rem;
     }
 }
@@ -48,11 +48,11 @@ body {
 }
 
 ::selection {
-  background: #E79AAA;
-  color: #2F5741;
+  background: #C8641E;
+  color: #FBEEDA;
 }
 
 ::-webkit-scrollbar { width: 10px; }
-::-webkit-scrollbar-track { background: #F7F1E8; }
-::-webkit-scrollbar-thumb { background: #C7D3B8; border-radius: 8px; }
-::-webkit-scrollbar-thumb:hover { background: #7FA06A; }
+::-webkit-scrollbar-track { background: #F5EBD6; }
+::-webkit-scrollbar-thumb { background: #D9B98A; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: #C8641E; }

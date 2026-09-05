@@ -1,29 +1,24 @@
 import React from 'react';
 
-// Scalloped checkerboard logo mark (pink + sage green) matching brand identity
+// Tarri and Treacle brand mark: a warm brown roundel with an orange (santra) slice.
 const Logo = ({ size = 44 }) => {
-  const cells = [
-    ['g', 'p', 'g', 'p'],
-    ['p', 'g', 'p', 'g'],
-    ['g', 'p', 'g', 'p'],
-    ['p', 'g', 'p', 'g'],
-  ];
-  const P = '#F2C9D1';
-  const G = '#7FA06A';
   return (
     <svg width={size} height={size} viewBox="0 0 100 100" className="shrink-0">
-      <defs>
-        <clipPath id="scallopClip">
-          <path d="M12 8 q6 -6 12 0 q6 -6 12 0 q6 -6 12 0 q6 -6 12 0 q6 -6 12 0 q6 6 0 12 q6 6 0 12 q6 6 0 12 q6 6 0 12 q-6 6 -12 0 q-6 6 -12 0 q-6 6 -12 0 q-6 6 -12 0 q-6 6 -12 0 q-6 -6 0 -12 q-6 -6 0 -12 q-6 -6 0 -12 q-6 -6 0 -12 Z" />
-        </clipPath>
-      </defs>
-      <g clipPath="url(#scallopClip)">
-        {cells.map((row, r) =>
-          row.map((c, i) => (
-            <rect key={`${r}-${i}`} x={12 + i * 19} y={8 + r * 19} width={19} height={19} fill={c === 'g' ? G : P} />
-          ))
-        )}
+      <circle cx="50" cy="50" r="48" fill="#3E2417" />
+      <circle cx="50" cy="50" r="44" fill="none" stroke="#C8641E" strokeWidth="2.5" />
+      {/* orange slice */}
+      <circle cx="50" cy="50" r="31" fill="#F2A65A" />
+      <circle cx="50" cy="50" r="31" fill="none" stroke="#FBEAD2" strokeWidth="4" />
+      <circle cx="50" cy="50" r="25" fill="#EE9642" />
+      <g stroke="#FBEAD2" strokeWidth="2" strokeLinecap="round">
+        <line x1="50" y1="50" x2="50" y2="27" />
+        <line x1="50" y1="50" x2="70" y2="38" />
+        <line x1="50" y1="50" x2="70" y2="62" />
+        <line x1="50" y1="50" x2="50" y2="73" />
+        <line x1="50" y1="50" x2="30" y2="62" />
+        <line x1="50" y1="50" x2="30" y2="38" />
       </g>
+      <circle cx="50" cy="50" r="4" fill="#FBEAD2" />
     </svg>
   );
 };

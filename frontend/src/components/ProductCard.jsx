@@ -5,10 +5,11 @@ import { toast } from 'sonner';
 import { useCart } from '../context/CartContext';
 
 const tagColor = {
-  Bestseller: 'bg-[#2F5741] text-[#F2C9D1]',
-  New: 'bg-[#E79AAA] text-white',
-  Gift: 'bg-[#7FA06A] text-white',
-  Popular: 'bg-[#D97E90] text-white',
+  Bestseller: 'bg-[#3E2417] text-[#EDBE85]',
+  New: 'bg-[#C8641E] text-white',
+  Spicy: 'bg-[#B23A1A] text-white',
+  Gift: 'bg-[#8A5A2B] text-white',
+  Popular: 'bg-[#C8641E] text-white',
 };
 
 const ProductCard = ({ product, index = 0 }) => {
@@ -18,7 +19,7 @@ const ProductCard = ({ product, index = 0 }) => {
     e.preventDefault();
     e.stopPropagation();
     addItem(product, 1);
-    toast.success(`${product.name} added to basket ♥`);
+    toast.success(`${product.name} added to your order ✦`);
   };
 
   return (
@@ -27,17 +28,17 @@ const ProductCard = ({ product, index = 0 }) => {
       className="product-card group block bg-white rounded-3xl overflow-hidden fade-up"
       style={{ animationDelay: `${(index % 8) * 60}ms` }}
     >
-      <div className="relative aspect-square overflow-hidden bg-[#EFE7D6]">
+      <div className="relative aspect-square overflow-hidden bg-[#EFE2C9]">
         <img src={product.img} alt={product.name} loading="lazy" className="product-img w-full h-full object-cover" />
         {product.tag && (
-          <span className={`absolute top-3 left-3 text-[11px] font-bold uppercase tracking-wide px-3 py-1 rounded-full ${tagColor[product.tag] || 'bg-[#2F5741] text-white'}`}>
+          <span className={`absolute top-3 left-3 text-[11px] font-bold uppercase tracking-wide px-3 py-1 rounded-full ${tagColor[product.tag] || 'bg-[#3E2417] text-white'}`}>
             {product.tag}
           </span>
         )}
         <button
           onClick={add}
-          aria-label="Add to basket"
-          className="absolute bottom-3 right-3 w-11 h-11 rounded-full bg-[#F2C9D1] text-[#2F5741] flex items-center justify-center shadow-lg translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 hover:bg-[#E79AAA]"
+          aria-label="Add to order"
+          className="absolute bottom-3 right-3 w-11 h-11 rounded-full bg-[#C8641E] text-white flex items-center justify-center shadow-lg translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 hover:bg-[#A9531A]"
         >
           <Plus size={20} />
         </button>
@@ -45,13 +46,13 @@ const ProductCard = ({ product, index = 0 }) => {
       <div className="p-4">
         <div className="flex items-center gap-1 text-[#E7A33B] mb-1.5">
           <Star size={13} fill="currentColor" />
-          <span className="text-xs text-[#6B6258] font-medium">{product.rating} · {product.reviews}</span>
+          <span className="text-xs text-[#7A6A55] font-medium">{product.rating} · {product.reviews}</span>
         </div>
-        <h3 className="font-semibold text-[#2F5741] leading-tight group-hover:text-[#D97E90] transition-colors">{product.name}</h3>
-        <p className="text-sm text-[#6B6258] mt-1 line-clamp-2 min-h-[40px]">{product.desc}</p>
+        <h3 className="font-semibold text-[#3E2417] leading-tight group-hover:text-[#C8641E] transition-colors">{product.name}</h3>
+        <p className="text-sm text-[#7A6A55] mt-1 line-clamp-2 min-h-[40px]">{product.desc}</p>
         <div className="flex items-center justify-between mt-2">
-          <span className="font-display font-bold text-lg text-[#2F5741]">₹{product.price}</span>
-          <span className="text-xs font-semibold text-[#D97E90] opacity-0 group-hover:opacity-100 transition-opacity">View →</span>
+          <span className="font-display font-bold text-lg text-[#3E2417]">₹{product.price}</span>
+          <span className="text-xs font-semibold text-[#C8641E] opacity-0 group-hover:opacity-100 transition-opacity">View →</span>
         </div>
       </div>
     </Link>

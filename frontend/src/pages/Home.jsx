@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Heart, Leaf, Sparkles, Truck, Gift, Star } from 'lucide-react';
+import { ArrowRight, Heart, Leaf, Clock, Star, MapPin, Flame } from 'lucide-react';
 import { useProducts } from '../context/ProductsContext';
 import ProductCard from '../components/ProductCard';
 import ProductSkeleton from '../components/ProductSkeleton';
@@ -9,55 +9,55 @@ import Logo from '../components/Logo';
 
 const Home = () => {
   const { products, loading, bestsellers, byCategory } = useProducts();
-  const heroImg = products.find((p) => p.name === 'Classic Chocolate')?.img || products[0]?.img;
-  const packImg = products.find((p) => p.name === 'Premium Gift Box (72 pcs)')?.img;
+  const heroImg = products.find((p) => p.name === 'Classic Tarri Poha')?.img || products[0]?.img;
+  const barfiImg = products.find((p) => p.category === 'barfi')?.img;
   const featured = bestsellers();
-  const crackers = byCategory('chocolate-crackers').slice(0, 4);
+  const poha = byCategory('tarri-poha').slice(0, 4);
 
   return (
     <div>
       {/* HERO */}
       <section className="relative overflow-hidden">
-        <div className="checker-strip absolute inset-0 opacity-[0.12]" />
+        <div className="spice-dots absolute inset-0 opacity-[0.10]" />
         <div className="relative max-w-7xl mx-auto px-4 md:px-8 py-14 md:py-20 grid lg:grid-cols-2 gap-10 items-center">
           <div className="fade-up">
-            <span className="inline-flex items-center gap-2 bg-[#F2C9D1] text-[#2F5741] text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-6">
-              <Sparkles size={14} /> Now available online
+            <span className="inline-flex items-center gap-2 bg-[#F6DCB8] text-[#3E2417] text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-6">
+              <MapPin size={14} /> Nagpur • Est. 2018
             </span>
-            <h1 className="font-display font-black text-[#2F5741] leading-[0.92] text-5xl md:text-6xl xl:text-7xl">
-              Crackers
-              <span className="block italic font-medium text-[#D97E90] text-4xl md:text-5xl xl:text-6xl my-1">and</span>
-              Checkers
+            <h1 className="font-display font-black text-[#3E2417] leading-[0.92] text-5xl md:text-6xl xl:text-7xl">
+              Tarri
+              <span className="block italic font-medium text-[#C8641E] text-4xl md:text-5xl xl:text-6xl my-1">and</span>
+              Treacle
             </h1>
-            <p className="mt-5 text-lg text-[#5A5148] max-w-md">
-              Chocolate-coated crackers, dreamy cakes & creamy shakes. <span className="font-semibold text-[#2F5741]">Crunch it. Love it. Repeat.</span>
+            <p className="mt-5 text-lg text-[#5A4636] max-w-md">
+              Zesty Nagpur tarri poha, crispy street snacks & melt-in-mouth santra barfi. <span className="font-semibold text-[#3E2417]">Desi flavours, sweet moments.</span>
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/shop" className="inline-flex items-center gap-2 px-7 py-4 rounded-full bg-[#2F5741] text-white font-semibold hover:bg-[#264a37] transition-all hover:gap-3">
-                Shop treats <ArrowRight size={18} />
+              <Link to="/shop" className="inline-flex items-center gap-2 px-7 py-4 rounded-full bg-[#3E2417] text-white font-semibold hover:bg-[#2C1810] transition-all hover:gap-3">
+                Order now <ArrowRight size={18} />
               </Link>
-              <Link to="/shop/chocolate-crackers" className="inline-flex items-center gap-2 px-7 py-4 rounded-full border-2 border-[#2F5741] text-[#2F5741] font-semibold hover:bg-[#F2C9D1] transition-colors">
-                Our signature crackers
+              <Link to="/shop/tarri-poha" className="inline-flex items-center gap-2 px-7 py-4 rounded-full border-2 border-[#3E2417] text-[#3E2417] font-semibold hover:bg-[#F6DCB8] transition-colors">
+                Our Tarri Poha
               </Link>
             </div>
-            <div className="mt-8 flex items-center gap-6 text-sm text-[#5A5148]">
+            <div className="mt-8 flex items-center gap-6 text-sm text-[#5A4636]">
               <span className="flex items-center gap-1.5"><Star size={16} className="text-[#E7A33B]" fill="currentColor" /> 4.8 rating</span>
-              <span className="flex items-center gap-1.5"><Truck size={16} className="text-[#7FA06A]" /> Free over ₹499</span>
-              <span className="flex items-center gap-1.5"><Leaf size={16} className="text-[#7FA06A]" /> No artificial colours</span>
+              <span className="flex items-center gap-1.5"><Clock size={16} className="text-[#C8641E]" /> 8AM – 10PM</span>
+              <span className="flex items-center gap-1.5"><Leaf size={16} className="text-[#C8641E]" /> Pure veg</span>
             </div>
           </div>
 
           <div className="relative fade-up" style={{ animationDelay: '120ms' }}>
             <div className="relative aspect-square max-w-lg mx-auto">
-              <div className="absolute inset-4 rounded-full checker-pink-green opacity-90" />
-              <div className="absolute inset-8 rounded-full bg-[#F7F1E8]" />
-              <img src={heroImg} alt="Chocolate crackers" className="absolute inset-10 w-[calc(100%-5rem)] h-[calc(100%-5rem)] object-cover rounded-full shadow-2xl" />
+              <div className="absolute inset-4 rounded-full checker-pink-green opacity-95" />
+              <div className="absolute inset-8 rounded-full bg-[#F5EBD6]" />
+              {heroImg && <img src={heroImg} alt="Tarri Poha" className="absolute inset-10 w-[calc(100%-5rem)] h-[calc(100%-5rem)] object-cover rounded-full shadow-2xl" />}
               <div className="absolute -top-2 -right-2 w-24 h-24 rounded-full bg-white shadow-xl flex flex-col items-center justify-center text-center float-slow">
-                <span className="font-poster text-[#D97E90] text-lg leading-none">100%</span>
-                <span className="text-[9px] font-bold text-[#2F5741] uppercase tracking-wide leading-tight mt-1">Crunch<br />Happiness</span>
+                <Flame size={20} className="text-[#C8641E]" />
+                <span className="text-[9px] font-bold text-[#3E2417] uppercase tracking-wide leading-tight mt-1">Freshly<br />Made</span>
               </div>
-              <div className="absolute -bottom-2 -left-2 bg-[#2F5741] text-white px-5 py-3 rounded-2xl shadow-xl">
-                <span className="font-display font-bold text-lg">from ₹35</span>
+              <div className="absolute -bottom-2 -left-2 bg-[#3E2417] text-white px-5 py-3 rounded-2xl shadow-xl">
+                <span className="font-display font-bold text-lg">from ₹50</span>
               </div>
             </div>
           </div>
@@ -66,15 +66,15 @@ const Home = () => {
 
       {/* Value ticker band */}
       <div className="checker-strip h-3" />
-      <div className="bg-[#2F5741] text-[#F2C9D1] py-4">
+      <div className="bg-[#3E2417] text-[#EEC79A] py-4">
         <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-sm font-medium">
           {[
-            { i: <Sparkles size={18} />, t: 'Made Fresh Daily' },
-            { i: <Leaf size={18} />, t: 'No Preservatives' },
+            { i: <Leaf size={18} />, t: '100% Vegetarian' },
+            { i: <Clock size={18} />, t: 'Made Fresh Daily' },
             { i: <Heart size={18} />, t: 'Made with Love' },
-            { i: <Gift size={18} />, t: 'Perfect for Gifting' },
+            { i: <MapPin size={18} />, t: 'Nagpur Street Food' },
           ].map((v, i) => (
-            <div key={i} className="flex items-center justify-center gap-2"><span className="text-[#F2C9D1]">{v.i}</span>{v.t}</div>
+            <div key={i} className="flex items-center justify-center gap-2"><span className="text-[#EDBE85]">{v.i}</span>{v.t}</div>
           ))}
         </div>
       </div>
@@ -85,10 +85,10 @@ const Home = () => {
       <section className="max-w-7xl mx-auto px-4 md:px-8 py-8">
         <div className="flex items-end justify-between mb-8">
           <div>
-            <p className="font-poster text-sm tracking-[0.2em] text-[#D97E90] mb-1">CROWD FAVOURITES</p>
-            <h2 className="font-display text-3xl md:text-4xl font-black text-[#2F5741]">Bestsellers & new drops</h2>
+            <p className="font-poster text-sm tracking-[0.2em] text-[#C8641E] mb-1">CROWD FAVOURITES</p>
+            <h2 className="font-display text-3xl md:text-4xl font-black text-[#3E2417]">Bestsellers & new arrivals</h2>
           </div>
-          <Link to="/shop" className="hidden sm:inline text-sm font-semibold text-[#2F5741] hover:text-[#D97E90] transition-colors">Shop all →</Link>
+          <Link to="/shop" className="hidden sm:inline text-sm font-semibold text-[#3E2417] hover:text-[#C8641E] transition-colors">Full menu →</Link>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {loading ? <ProductSkeleton count={8} /> : featured.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
@@ -97,42 +97,42 @@ const Home = () => {
 
       {/* Signature banner */}
       <section className="max-w-7xl mx-auto px-4 md:px-8 py-16">
-        <div className="rounded-[2rem] overflow-hidden grid md:grid-cols-2 items-stretch bg-[#EFE7D6]">
+        <div className="rounded-[2rem] overflow-hidden grid md:grid-cols-2 items-stretch bg-[#EFE2C9]">
           <div className="p-8 md:p-14 flex flex-col justify-center">
-            <span className="font-poster text-sm tracking-[0.2em] text-[#D97E90] mb-2">OUR SIGNATURE</span>
-            <h2 className="font-display text-4xl md:text-5xl font-black text-[#2F5741] leading-tight">Chocolate<br />Coated Crackers</h2>
-            <p className="mt-4 text-[#5A5148] max-w-md">Crispy crackers dunked in rich chocolate, in 10 dreamy flavours — from Classic Chocolate to Matcha Crunch. Crunch outside, sweet inside.</p>
-            <Link to="/shop/chocolate-crackers" className="mt-7 inline-flex items-center gap-2 px-7 py-4 rounded-full bg-[#2F5741] text-white font-semibold w-fit hover:bg-[#264a37] transition-all hover:gap-3">
-              Explore flavours <ArrowRight size={18} />
+            <span className="font-poster text-sm tracking-[0.2em] text-[#C8641E] mb-2">OUR SIGNATURE</span>
+            <h2 className="font-display text-4xl md:text-5xl font-black text-[#3E2417] leading-tight">The Legendary<br />Tarri Poha</h2>
+            <p className="mt-4 text-[#5A4636] max-w-md">Fluffy poha drowned in fiery Nagpuri tarri, crowned with sev, peanuts, onion & a squeeze of lime. Classic, cheesy or extra-jhal — your call.</p>
+            <Link to="/shop/tarri-poha" className="mt-7 inline-flex items-center gap-2 px-7 py-4 rounded-full bg-[#3E2417] text-white font-semibold w-fit hover:bg-[#2C1810] transition-all hover:gap-3">
+              Explore poha <ArrowRight size={18} />
             </Link>
           </div>
           <div className="relative min-h-[280px] checker-pink-green">
             <div className="absolute inset-0 flex items-center justify-center p-8">
-              {crackers[0] && <img src={crackers[0].img} alt="Signature crackers" className="w-full h-full object-cover rounded-3xl shadow-2xl float-slow" />}
+              {poha[0] && <img src={poha[0].img} alt="Signature tarri poha" className="w-full h-full object-cover rounded-3xl shadow-2xl float-slow" />}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Flavour grid */}
+      {/* Poha grid */}
       <section className="max-w-7xl mx-auto px-4 md:px-8 pb-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          {crackers.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
+          {poha.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
         </div>
       </section>
 
-      {/* Gift box promo */}
+      {/* Santra barfi promo */}
       <section className="max-w-7xl mx-auto px-4 md:px-8 py-16">
-        <div className="rounded-[2rem] bg-[#2F5741] text-white overflow-hidden grid md:grid-cols-2 items-center">
+        <div className="rounded-[2rem] bg-[#3E2417] text-white overflow-hidden grid md:grid-cols-2 items-center">
           <div className="relative min-h-[300px] order-2 md:order-1">
-            <img src={packImg} alt="Premium gift box" className="w-full h-full object-cover" />
+            {barfiImg && <img src={barfiImg} alt="Santra orange barfi" className="w-full h-full object-cover" />}
           </div>
           <div className="p-8 md:p-14 order-1 md:order-2">
             <Logo size={54} />
-            <h2 className="font-display text-4xl md:text-5xl font-black mt-5 leading-tight">Gift the crunch<span className="text-[#F2C9D1]"> happiness</span></h2>
-            <p className="mt-4 text-[#CBD8C6] max-w-md">Beautiful checkerboard boxes packed with treats. From Single Packs to the Premium Gift Box of 72 — perfect for every celebration.</p>
-            <Link to="/shop/packs" className="mt-7 inline-flex items-center gap-2 px-7 py-4 rounded-full bg-[#F2C9D1] text-[#2F5741] font-semibold w-fit hover:bg-[#E79AAA] transition-all hover:gap-3">
-              Shop gift boxes <ArrowRight size={18} />
+            <h2 className="font-display text-4xl md:text-5xl font-black mt-5 leading-tight">Sweet moments,<span className="text-[#EDBE85]"> santra barfi</span></h2>
+            <p className="mt-4 text-[#C9B291] max-w-md">Nagpur’s beloved orange barfi — soft, melt-in-mouth and infused with fresh santra zest. Classic, pistachio, coconut or loaded with dry fruits.</p>
+            <Link to="/shop/barfi" className="mt-7 inline-flex items-center gap-2 px-7 py-4 rounded-full bg-[#C8641E] text-white font-semibold w-fit hover:bg-[#A9531A] transition-all hover:gap-3">
+              Shop barfi <ArrowRight size={18} />
             </Link>
           </div>
         </div>
@@ -141,19 +141,19 @@ const Home = () => {
       {/* Testimonials */}
       <section className="max-w-7xl mx-auto px-4 md:px-8 py-8 pb-20">
         <div className="text-center mb-10">
-          <p className="font-poster text-sm tracking-[0.2em] text-[#D97E90] mb-1">SWEET WORDS</p>
-          <h2 className="font-display text-3xl md:text-4xl font-black text-[#2F5741]">Loved by crunch lovers</h2>
+          <p className="font-poster text-sm tracking-[0.2em] text-[#C8641E] mb-1">SWEET WORDS</p>
+          <h2 className="font-display text-3xl md:text-4xl font-black text-[#3E2417]">Loved across Nagpur</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
           {[
-            { n: 'Ananya R.', t: 'The Salted Caramel crackers are dangerously addictive. Crunchy, sweet, perfect!' },
-            { n: 'Rohan M.', t: 'Ordered the Premium Gift Box for a birthday — the checkerboard packaging is gorgeous.' },
-            { n: 'Priya S.', t: 'Strawberry Blush + a Cold Coffee = my new happy place. Fresh and delicious every time.' },
+            { n: 'Sneha K.', t: 'The Classic Tarri Poha is exactly like the katta near Sitabuldi. Fiery and fresh!' },
+            { n: 'Aditya P.', t: 'Ordered santra barfi for Diwali — melted in the mouth. Everyone asked where I got it.' },
+            { n: 'Rutuja M.', t: 'Cheese Tarri Poha + Sev Puri combo is my weekend ritual now. Absolutely delicious.' },
           ].map((r, i) => (
-            <div key={i} className="bg-white rounded-3xl p-7 border border-[#EBE0CE]">
+            <div key={i} className="bg-white rounded-3xl p-7 border border-[#E7D6B4]">
               <div className="flex gap-1 text-[#E7A33B] mb-3">{Array.from({ length: 5 }).map((_, k) => <Star key={k} size={16} fill="currentColor" />)}</div>
-              <p className="text-[#5A5148] leading-relaxed">“{r.t}”</p>
-              <p className="mt-4 font-semibold text-[#2F5741]">{r.n}</p>
+              <p className="text-[#5A4636] leading-relaxed">“{r.t}”</p>
+              <p className="mt-4 font-semibold text-[#3E2417]">{r.n}</p>
             </div>
           ))}
         </div>
