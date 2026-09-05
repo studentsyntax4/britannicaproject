@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Minus, Plus, Star, ArrowLeft, ShoppingBag, Leaf, Clock, Flame } from 'lucide-react';
+import { Minus, Plus, ArrowLeft, ShoppingBag, Leaf, Clock, Flame } from 'lucide-react';
 import { toast } from 'sonner';
 import { CATEGORIES, ADDONS } from '../mock';
 import { useProducts } from '../context/ProductsContext';
@@ -66,10 +66,6 @@ const ProductDetail = () => {
         <div>
           <Link to={`/shop/${product.category}`} className="text-sm font-semibold text-[#C8641E] uppercase tracking-wide">{cat?.name}</Link>
           <h1 className="font-display text-4xl md:text-5xl font-black text-[#3E2417] mt-2 leading-tight">{product.name}</h1>
-          <div className="flex items-center gap-2 mt-3">
-            <div className="flex gap-0.5 text-[#E7A33B]">{Array.from({ length: 5 }).map((_, k) => <Star key={k} size={16} fill="currentColor" />)}</div>
-            <span className="text-sm text-[#7A6A55]">{product.rating} · {product.reviews} reviews</span>
-          </div>
           <p className="mt-5 text-[#5A4636] text-lg leading-relaxed">{product.desc}</p>
           <div className="mt-6 font-display font-black text-4xl text-[#3E2417]">₹{product.price}</div>
 

@@ -25,6 +25,10 @@ const IMG = {
   poha4: 'https://images.pexels.com/photos/36971466/pexels-photo-36971466.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
   poha5: 'https://images.pexels.com/photos/38860522/pexels-photo-38860522.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
   barfi: 'https://images.unsplash.com/photo-1758910536889-43ce7b3199fd?crop=entropy&cs=srgb&fm=jpg&q=85&w=940',
+  barfiClassic: 'https://images.unsplash.com/photo-1543773495-2cd9248a5bda?crop=entropy&cs=srgb&fm=jpg&q=85&w=940',
+  barfiPista: 'https://images.pexels.com/photos/7182054/pexels-photo-7182054.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+  barfiCoconut: 'https://images.pexels.com/photos/18488320/pexels-photo-18488320.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+  barfiDryfruit: 'https://images.pexels.com/photos/18488299/pexels-photo-18488299.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
   samosa1: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?crop=entropy&cs=srgb&fm=jpg&q=85&w=940',
   samosa2: 'https://images.pexels.com/photos/36170557/pexels-photo-36170557.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
   chaat: 'https://images.unsplash.com/photo-1591031107640-45556bbac5f1?crop=entropy&cs=srgb&fm=jpg&q=85&w=940',
@@ -52,10 +56,10 @@ export const PRODUCTS = [
   p({ category: 'snacks', name: 'Samosa Chaat', price: 100, img: IMG.samosa1, desc: 'Crushed samosa with tarri drizzle, yogurt & sev.' }),
 
   // Santra Specials (Orange Barfi)
-  p({ category: 'barfi', name: 'Classic Santra Burfi', price: 50, img: IMG.barfi, tag: 'Bestseller', desc: 'Traditional orange burfi, melt-in-mouth sweet. Per piece.' }),
-  p({ category: 'barfi', name: 'Santra Pistachio Burfi', price: 60, img: IMG.barfi, desc: 'Orange burfi topped with crushed pistachio. Per piece.' }),
-  p({ category: 'barfi', name: 'Santra Coconut Burfi', price: 55, img: IMG.barfi, desc: 'Coconut & orange zest infused burfi. Per piece.' }),
-  p({ category: 'barfi', name: 'Santra Dryfruit Burfi', price: 70, img: IMG.barfi, tag: 'Gift', desc: 'Loaded with almonds, cashews & orange peel. Per piece.' }),
+  p({ category: 'barfi', name: 'Classic Santra Burfi', price: 50, img: IMG.barfiClassic, tag: 'Bestseller', desc: 'Traditional orange burfi, melt-in-mouth sweet. Per piece.' }),
+  p({ category: 'barfi', name: 'Santra Pistachio Burfi', price: 60, img: IMG.barfiPista, desc: 'Orange burfi topped with crushed pistachio. Per piece.' }),
+  p({ category: 'barfi', name: 'Santra Coconut Burfi', price: 55, img: IMG.barfiCoconut, desc: 'Coconut & orange zest infused burfi. Per piece.' }),
+  p({ category: 'barfi', name: 'Santra Dryfruit Burfi', price: 70, img: IMG.barfiDryfruit, tag: 'Gift', desc: 'Loaded with almonds, cashews & orange peel. Per piece.' }),
 ];
 
 export const ADDONS = [

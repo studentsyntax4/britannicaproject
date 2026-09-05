@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Heart, Leaf, Clock, Star, MapPin, Flame } from 'lucide-react';
+import { ArrowRight, Heart, Leaf, Clock, MapPin, Flame } from 'lucide-react';
 import { useProducts } from '../context/ProductsContext';
 import ProductCard from '../components/ProductCard';
 import ProductSkeleton from '../components/ProductSkeleton';
 import CategoryStrip from '../components/CategoryStrip';
+import LocationMap from '../components/LocationMap';
 import Logo from '../components/Logo';
 
 const Home = () => {
@@ -41,7 +42,7 @@ const Home = () => {
               </Link>
             </div>
             <div className="mt-8 flex items-center gap-6 text-sm text-[#5A4636]">
-              <span className="flex items-center gap-1.5"><Star size={16} className="text-[#E7A33B]" fill="currentColor" /> 4.8 rating</span>
+              <span className="flex items-center gap-1.5"><Flame size={16} className="text-[#C8641E]" /> Made fresh</span>
               <span className="flex items-center gap-1.5"><Clock size={16} className="text-[#C8641E]" /> 8AM – 10PM</span>
               <span className="flex items-center gap-1.5"><Leaf size={16} className="text-[#C8641E]" /> Pure veg</span>
             </div>
@@ -138,26 +139,8 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="max-w-7xl mx-auto px-4 md:px-8 py-8 pb-20">
-        <div className="text-center mb-10">
-          <p className="font-poster text-sm tracking-[0.2em] text-[#C8641E] mb-1">SWEET WORDS</p>
-          <h2 className="font-display text-3xl md:text-4xl font-black text-[#3E2417]">Loved across Nagpur</h2>
-        </div>
-        <div className="grid md:grid-cols-3 gap-6">
-          {[
-            { n: 'Sneha K.', t: 'The Classic Tarri Poha is exactly like the katta near Sitabuldi. Fiery and fresh!' },
-            { n: 'Aditya P.', t: 'Ordered santra barfi for Diwali — melted in the mouth. Everyone asked where I got it.' },
-            { n: 'Rutuja M.', t: 'Cheese Tarri Poha + Sev Puri combo is my weekend ritual now. Absolutely delicious.' },
-          ].map((r, i) => (
-            <div key={i} className="bg-white rounded-3xl p-7 border border-[#E7D6B4]">
-              <div className="flex gap-1 text-[#E7A33B] mb-3">{Array.from({ length: 5 }).map((_, k) => <Star key={k} size={16} fill="currentColor" />)}</div>
-              <p className="text-[#5A4636] leading-relaxed">“{r.t}”</p>
-              <p className="mt-4 font-semibold text-[#3E2417]">{r.n}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* Visit us / location map */}
+      <LocationMap />
     </div>
   );
 };

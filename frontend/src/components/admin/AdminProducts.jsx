@@ -123,20 +123,17 @@ const AdminProducts = () => {
               </div>
               <Input label="Image URL" value={form.img} onChange={set('img')} />
               {form.img && <img src={form.img} alt="preview" className="w-full h-36 object-cover rounded-xl" />}
-              <div className="grid grid-cols-2 gap-4">
-                <label className="block">
-                  <span className="block text-sm font-medium text-[#3E2417] mb-1.5">Tag (optional)</span>
-                  <select value={form.tag} onChange={set('tag')} className="w-full px-3 py-3 rounded-xl border border-[#E4D2B0] bg-white text-[#3E2417] outline-none focus:border-[#C8641E]">
-                    <option value="">None</option>
-                    <option value="Bestseller">Bestseller</option>
-                    <option value="New">New</option>
-                    <option value="Spicy">Spicy</option>
-                    <option value="Popular">Popular</option>
-                    <option value="Gift">Gift</option>
-                  </select>
-                </label>
-                <Input label="Reviews" type="number" value={form.reviews} onChange={set('reviews')} />
-              </div>
+              <label className="block">
+                <span className="block text-sm font-medium text-[#3E2417] mb-1.5">Tag (optional)</span>
+                <select value={form.tag} onChange={set('tag')} className="w-full px-3 py-3 rounded-xl border border-[#E4D2B0] bg-white text-[#3E2417] outline-none focus:border-[#C8641E]">
+                  <option value="">None</option>
+                  <option value="Bestseller">Bestseller</option>
+                  <option value="New">New</option>
+                  <option value="Spicy">Spicy</option>
+                  <option value="Popular">Popular</option>
+                  <option value="Gift">Gift</option>
+                </select>
+              </label>
               <label className="block">
                 <span className="block text-sm font-medium text-[#3E2417] mb-1.5">Description</span>
                 <textarea value={form.desc} onChange={set('desc')} rows={2} className="w-full px-3 py-3 rounded-xl border border-[#E4D2B0] bg-white text-[#3E2417] outline-none focus:border-[#C8641E] resize-none" />

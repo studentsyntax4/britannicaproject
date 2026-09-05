@@ -67,7 +67,7 @@ const About = () => {
           {[
             { n: 'Est. 2018', l: 'Serving Nagpur' },
             { n: '14+', l: 'Menu items' },
-            { n: '4.8★', l: 'Average rating' },
+            { n: '8AM–10PM', l: 'Open daily' },
             { n: '100%', l: 'Vegetarian' },
           ].map((s, i) => (
             <div key={i}>

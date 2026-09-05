@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Star } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import { useCart } from '../context/CartContext';
 
@@ -44,10 +44,6 @@ const ProductCard = ({ product, index = 0 }) => {
         </button>
       </div>
       <div className="p-4">
-        <div className="flex items-center gap-1 text-[#E7A33B] mb-1.5">
-          <Star size={13} fill="currentColor" />
-          <span className="text-xs text-[#7A6A55] font-medium">{product.rating} · {product.reviews}</span>
-        </div>
         <h3 className="font-semibold text-[#3E2417] leading-tight group-hover:text-[#C8641E] transition-colors">{product.name}</h3>
         <p className="text-sm text-[#7A6A55] mt-1 line-clamp-2 min-h-[40px]">{product.desc}</p>
         <div className="flex items-center justify-between mt-2">
