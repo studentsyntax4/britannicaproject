@@ -23,7 +23,7 @@ const Home = () => {
         <div className="relative max-w-7xl mx-auto px-4 md:px-8 py-14 md:py-20 grid lg:grid-cols-2 gap-10 items-center">
           <div className="fade-up">
             <span className="inline-flex items-center gap-2 bg-[#F6DCB8] text-[#3E2417] text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-6">
-              <MapPin size={14} /> Nagpur • Est. 2018
+              <MapPin size={14} /> Nagpur
             </span>
             <h1 className="font-display font-black text-[#3E2417] leading-[0.92] text-5xl md:text-6xl xl:text-7xl">
               Tarri

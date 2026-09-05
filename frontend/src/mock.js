@@ -5,7 +5,7 @@ export const BRAND = {
   name: 'Tarri and Treacle',
   tagline: 'DESI FLAVOURS, SWEET MOMENTS',
   subtag: 'Fresh Poha, Zesty Tarri, Sweet Memories!',
-  est: 'Nagpur • Authentic Flavours • Est. 2018',
+  est: 'Nagpur • Authentic Flavours',
   phone: '+91 98765 43210',
   location: 'Sitabuldi, Nagpur',
   hours: 'Open Daily 8 AM – 10 PM',

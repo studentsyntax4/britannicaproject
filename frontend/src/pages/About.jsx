@@ -17,7 +17,7 @@ const About = () => {
             Desi flavours,<br /><span className="italic font-medium text-[#C8641E]">sweet moments</span>
           </h1>
           <p className="mt-6 text-lg text-[#5A4636] max-w-2xl mx-auto">
-            Since 2018, Tarri and Treacle has been serving the soul of Nagpur — fiery tarri poha, crispy street snacks and the city’s famous santra barfi. All made fresh, all pure veg, all made with love.
+            Tarri and Treacle serves the soul of Nagpur — fiery tarri poha, crispy street snacks and the city’s famous santra barfi. All made fresh, all pure veg, all made with love.
           </p>
         </div>
       </section>
@@ -65,7 +65,7 @@ const About = () => {
       <section className="max-w-7xl mx-auto px-4 md:px-8 py-16">
         <div className="rounded-[2rem] bg-[#3E2417] text-white grid grid-cols-2 md:grid-cols-4 gap-6 p-10 md:p-14 text-center">
           {[
-            { n: 'Est. 2018', l: 'Serving Nagpur' },
+            { n: 'Nagpur', l: 'Made locally' },
             { n: '14+', l: 'Menu items' },
             { n: '8AM–10PM', l: 'Open daily' },
             { n: '100%', l: 'Vegetarian' },
